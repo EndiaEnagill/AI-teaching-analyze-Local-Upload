@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传视频 - 视频分析平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .upload-page {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .upload-container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .upload-header h1 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .upload-header p {
+            color: #6c757d;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: white;
+        }
+
+        .file-upload {
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: rgba(248, 249, 250, 0.5);
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .file-upload.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.02);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .file-label {
+            cursor: pointer;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .file-hint {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .file-name {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #495057;
+            font-weight: 500;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .upload-progress {
+            margin-top: 25px;
+            display: none;
+        }
+
+        .progress-info {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .success-message {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .file-types {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-page">
+        <div class="upload-container">
+            <div class="upload-header">
+                <h1>上传视频</h1>
+                <p>填写课程信息并上传视频文件</p>
+            </div>
+
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="courseName" class="required">课程名称</label>
+                    <input type="text" id="courseName" name="course_name" 
+                           placeholder="请输入课程名称" required>
+                    <div class="error-message" id="courseNameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="teacher" class="required">授课教师</label>
+                    <input type="text" id="teacher" name="teacher" 
+                           placeholder="请输入授课教师姓名" required>
+                    <div class="error-message" id="teacherError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentType" class="required">授课对象</label>
+                    <input type="text" id="studentType" name="student_type" 
+                           placeholder="例如：计算机科学专业大三学生" required>
+                    <div class="error-message" id="studentTypeError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="required">视频文件</label>
+                    <div class="file-upload" id="videoUploadArea">
+                        <input type="file" id="videoFile" name="video_file" 
+                               accept=".mp4,.avi,.mov,.mkv,.flv,.wmv" required>
+                        <label for="videoFile" class="file-label">点击选择视频文件</label>
+                        <div class="file-hint">或拖拽文件到这里</div>
+                        <div class="file-name" id="videoFileName">未选择文件</div>
+                        <div class="file-types">支持格式: MP4, AVI, MOV, MKV, FLV, WMV</div>
+                    </div>
+                    <div class="error-message" id="videoFileError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>教案文件（可选）</label>
+                    <div class="file-upload" id="outlineUploadArea">
+                        <input type="file" id="outlineFile" name="outline_file" 
+                               accept=".pdf,.doc,.docx,.txt,.ppt,.pptx">
+                        <label for="outlineFile" class="file-label">点击选择教案文件</label>
+                        <div class="file-hint">或拖拽文件到这里</div>
+                        <div class="file-name" id="outlineFileName">未选择文件</div>
+                        <div class="file-types">支持格式: PDF, DOC, DOCX, TXT, PPT, PPTX</div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="window.close()">
+                        <span>←</span> 取消
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span>🚀</span> 开始分析
+                    </button>
+                </div>
+            </form>
+
+            <div class="upload-progress" id="uploadProgress">
+                <div class="progress-info">
+                    <p>文件上传中，请稍候...</p>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="success-message" id="successMessage"></div>
+        </div>
+    </div>
+
+    <script src="js/upload.js"></script>
+</body>
+</html>

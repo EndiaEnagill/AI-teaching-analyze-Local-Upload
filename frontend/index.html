@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>卓越教师成长助手</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>卓越教师成长助手</h1>
+            <button class="upload-btn" onclick="openUploadPage()">
+                <span class="btn-icon">📤</span>
+                上传视频
+            </button>
+        </header>
+
+        <!-- 任务列表 -->
+        <div class="task-list-container">
+            <div class="table-header">
+                <h2>分析任务列表</h2>
+                <div class="controls">
+                    <button class="refresh-btn" onclick="refreshTasks()">
+                        <span class="btn-icon">🔄</span>
+                        刷新
+                    </button>
+                    <span class="last-update">最后更新: <span id="lastUpdateTime">--</span></span>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="taskTable">
+                    <thead>
+                        <tr>
+                            <th>课程名称</th>
+                            <th>编号</th>
+                            <th>授课教师</th>
+                            <th>授课对象</th>
+                            <th>上传时间</th>
+                            <th>当前步骤</th>
+                            <th>总体进度</th>
+                            <th>预估剩余时间</th>
+                            <th>状态</th>
+                            <th>课程链接</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taskTableBody">
+                        <tr>
+                            <td colspan="10" class="empty-state">
+                                <div class="empty-content">
+                                    <h3>暂无分析任务</h3>
+                                    <p>点击右上角的"上传视频"按钮开始第一个分析任务</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 分页控件 -->
+            <div class="pagination">
+                <button id="prevPage" class="page-btn" onclick="changePage(-1)">
+                    <span>‹</span> 上一页
+                </button>
+                <span id="pageInfo" class="page-info">第 1 页，共 1 页</span>
+                <button id="nextPage" class="page-btn" onclick="changePage(1)">
+                    下一页 <span>›</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 加载提示 -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>加载中...</p>
+        </div>
+
+        <!-- 错误提示 -->
+        <div id="errorToast" class="toast error-toast">
+            <span class="toast-icon">❌</span>
+            <span class="toast-message" id="errorMessage"></span>
+            <button class="toast-close" onclick="hideError()">×</button>
+        </div>
+    </div>
+
+    <script src="js/list.js"></script>
+</body>
+</html>
